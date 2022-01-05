@@ -1,0 +1,21 @@
+@import "./Scss/base/_colors";
+.container {
+  margin-top: 3%;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  h1 {
+    text-align: center;
+  }
+}
+.users {
+  margin: 2% auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  button {
+    width: 80%;
+    height: 80%;
+  }
+}
+
+
