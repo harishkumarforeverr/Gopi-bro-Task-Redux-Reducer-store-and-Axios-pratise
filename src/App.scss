@@ -12,6 +12,16 @@
     & > div {
       margin: 0.8rem;
     }
+    &__inputs {
+      display: flex;
+      gap: 3%;
+      text-align: center;
+      label {
+        // background-color: red;
+        font-size: 2rem;
+        font-weight: 600;
+      }
+    }
   }
 }
 .users {
@@ -23,6 +33,16 @@
     height: 80%;
   }
 }
+.ant-table-content {
+  table {
+    width: 70% !important;
+    margin: 0 auto;
+    // background-color: red;
+  }
+}
+// .ant-table .table{
+
+// }
 .ant-select-selector,
 .ant-select-selector {
   display: none !important;
@@ -34,7 +54,10 @@
 }
 .add.ant-btn,
 .add.ant-btn:hover,
-.add.ant-btn:active .add.ant-btn:focus {
+.add.ant-btn:active .add.ant-btn:focus,
+.add.ant-btn:hover,
+.add.ant-btn:focus,
+.add.ant-btn:active {
   background-color: #2d80b5;
   width: 100%;
   color: white;
@@ -42,9 +65,13 @@
   font-weight: 600;
   height: 4rem;
 }
+
 .update.ant-btn,
 .update.ant-btn:hover,
-.update.ant-btn:active .update.ant-btn:focus {
+.update.ant-btn:active .update.ant-btn:focus,
+.update.ant-btn:hover,
+.update.ant-btn:focus,
+.update.ant-btn:active {
   background-color: #52c41a;
   width: 100%;
   color: white;

@@ -217,8 +217,9 @@ const App = () => {
       <div className="container">
         <h1> Welcome To Survery Record </h1>
         <div className="container__items">
-          <div>
-            <label> Username : </label>
+        <div className="container__items__inputs">
+        <div>
+            <label> Username </label>
             <Input
               name="name"
               value={inputfields.name}
@@ -227,7 +228,7 @@ const App = () => {
             />
           </div>
           <div>
-            <label> Age : </label>
+            <label> Age </label>
             <Input
               value={inputfields.age}
               onChange={handleInputChange}
@@ -235,6 +236,7 @@ const App = () => {
               type="number"
             />
           </div>
+        </div>
           <div>
             {ShowAdd ? (
               <Button
