@@ -1,17 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.scss";
 import "antd/dist/antd.css";
-import { Button, Input, Table } from "antd";
-
+import { Button, Input, Table, message } from "antd";
+import axios from "axios";
 const App = () => {
   const [formDate, setFormDate] = useState([]);
   const [inputfields, setInputFields] = useState({
     name: "",
     age: "",
   });
-  const [id, setID] = useState(0);
+  const [id, setID] = useState(101);
   const [ShowAdd, setShowAdd] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      // Here is used Get Method
+      try {
+        const respo = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts"
+        );
+        console.log(respo);
+        if (respo.request.status === 200) {
+          respo.data.reverse().map((obj) => {
+            setFormDate((prevSnapShot) => [
+              ...prevSnapShot,
+              {
+                id: obj.id,
+                name: obj.title.slice(0, 10),
+                age: obj.id,
+                key: obj.id,
+              },
+            ]);
+            return undefined;
+          });
+          message.success("Data is fetched Sucessfully ");
+        } else {
+          message.success("Data is fetched failed ");
+        }
+      } catch (e) {
+        console.log(e);
+        message.success("Data is fetched failed ");
+      }
+    };
+    fetchData();
+  }, []);
   const handleInputChange = (e) => {
     console.log(e.target.name, e.target.value);
 
@@ -24,26 +56,63 @@ const App = () => {
     }));
   };
 
-  const handleAddSubmit = (e) => {
+  const handleAddSubmit = async (e) => {
     if (inputfields.name && inputfields.age) {
-      setFormDate((prevSnapShot) => [
-        ...prevSnapShot,
-        {
-          name: inputfields.name,
-          age: inputfields.age,
-          id,
-        },
-      ]);
+      const obj = {
+        name: inputfields.name,
+        age: inputfields.age,
+        id,
+        key: id,
+      };
+      setFormDate((prevSnapShot) => [obj, ...prevSnapShot]);
       setInputFields((prevSnapShot) => ({
         name: "",
         age: "",
       }));
       setID((prevSnapShot) => prevSnapShot + 1);
+      // Here is used Post method
+      try {
+        const respo = await axios({
+          method: "post",
+          url: "https://jsonplaceholder.typicode.com/posts",
+          data: {
+            title: obj.name,
+            body: obj.age,
+            userId: id,
+          },
+        });
+        if (respo.request.status === 200 || respo.request.status === 201) {
+          console.log(respo);
+          message.success("Data is stored Sucess full ");
+        } else {
+          new Error("some went worng");
+        }
+      } catch (error) {
+        console.log("error occured", error);
+        message.error("Data is faied to store");
+      }
     }
   };
-  const handleRemoveUser = (id) => {
+  const handleRemoveUser = async (id) => {
     const newData = formDate.filter((item) => item.id !== id);
     setFormDate(newData);
+    try {
+      const respo = await axios.delete(
+        `https://jsonplaceholder.typicode.com/posts/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (respo.request.status === 200 || respo.request.status === 201) {
+        console.log(respo, "okkkkkkkkkkkkkkkkk");
+        message.success("Data is deleted  Sucessfully ");
+      } else {
+        new Error("some went worng");
+      }
+    } catch (e) {
+      message.error("Data is not deleted");
+    }
   };
 
   const handleEditUser = (id) => {
@@ -56,7 +125,7 @@ const App = () => {
     });
     setShowAdd(false);
   };
-  const handleUpdateSubmit = () => {
+  const handleUpdateSubmit = async () => {
     if (inputfields.name && inputfields.age) {
       setFormDate((prevSnapShot) => {
         return prevSnapShot.map((item) => {
@@ -65,11 +134,30 @@ const App = () => {
               name: inputfields.name,
               age: inputfields.age,
               id: item.id,
+              key: item.id,
             };
           }
           return item;
         });
       });
+      try {
+        const data = {
+          name: inputfields.name,
+          age: inputfields.age,
+          id: inputfields.id,
+          key: inputfields.id,
+        };
+        const respo = await axios.put(
+          `https://jsonplaceholder.typicode.com/posts/${inputfields.id}`,
+          data
+        );
+        console.log(respo.data, "hahahhahahah");
+        message.success("Data is updated Sucessfully ");
+      } catch (error) {
+        console.log("error occured", error);
+        message.error("Data is failed to store");
+      }
+
       setInputFields((prevSnapShot) => ({
         name: "",
         age: "",
@@ -95,13 +183,14 @@ const App = () => {
       dataIndex: "Edit",
       key: "Edit",
       render: (text, record) => (
-        <Button type="primary"
+        <Button
+          type="primary"
           onClick={() => {
-            // console.log(record);
+            console.log(record);
             handleEditUser(record.id);
           }}
         >
-   Edit
+          Edit
         </Button>
       ),
     },
@@ -110,13 +199,15 @@ const App = () => {
       dataIndex: "Delete",
       key: "Delete",
       render: (text, record) => (
-        <Button type="primary" danger
+        <Button
+          type="primary"
+          danger
           onClick={() => {
-            // console.log(record);
+            console.log(record);
             handleRemoveUser(record.id);
           }}
         >
-        Delete
+          Delete
         </Button>
       ),
     },
@@ -146,17 +237,22 @@ const App = () => {
           </div>
           <div>
             {ShowAdd ? (
-              <Button 
-              className="add"
-              type="primary" type="primary" onClick={handleAddSubmit} type="submit">
+              <Button
+                className="add"
+                type="primary"
+                type="primary"
+                onClick={handleAddSubmit}
+                type="submit"
+              >
                 {" "}
                 Add{" "}
               </Button>
             ) : (
-              <Button 
-              
-              className="update"
-              onClick={handleUpdateSubmit} type="submit">
+              <Button
+                className="update"
+                onClick={handleUpdateSubmit}
+                type="submit"
+              >
                 {" "}
                 Update{" "}
               </Button>
@@ -167,37 +263,15 @@ const App = () => {
       <div>
         {formDate ? (
           <div>
-            {/* {formDate.map((item) => {
-              return (
-                <div className="users" key={item.id}>
-                  <h1> {item.name}</h1>
-                  <h2> {item.age}</h2>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      handleEditUser(item.id);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleRemoveUser(item.id);
-                    }}
-                    type="primary"
-                    danger
-                  >
-                    {" "}
-                    Remove
-                  </Button>
-                </div>
-              );
-            })} */}
             <Table
               key="table"
               columns={columns}
               dataSource={formDate}
-              pagination={false}
+              // pagination={false}
+              pagination={{
+                pageSize: 8,
+                size: "small",
+              }}
             />
           </div>
         ) : (
