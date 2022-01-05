@@ -7,6 +7,12 @@
   h1 {
     text-align: center;
   }
+  &__items {
+    display: grid;
+    & > div {
+      margin: .8rem;
+    }
+  }
 }
 .users {
   margin: 2% auto;
@@ -17,5 +23,19 @@
     height: 80%;
   }
 }
-
-
+.add.ant-btn,
+.add.ant-btn:hover,
+.add.ant-btn:active .add.ant-btn:focus {
+  background-color: #2d80b5;
+  width: 100%;
+  color: white;
+  font-size: 2rem;
+  font-weight: 600;
+  height: 4rem;
+}
+.update.ant-btn,
+.update.ant-btn:hover,
+.update.ant-btn:active .update.ant-btn:focus {
+  background-color: #52c41a;
+  width: 100%;
+}
