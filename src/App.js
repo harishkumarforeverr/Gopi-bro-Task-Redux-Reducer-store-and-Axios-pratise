@@ -25,7 +25,7 @@ const App = () => {
         console.log(respo);
         if (respo.request.status === 200) {
           message.success("Data is fetched Sucessfully ");
-          respo.data.reverse().map((obj) => {
+          respo.data.reverse().slice(0,10).map((obj) => {
             setFormDate((prevSnapShot) => [
               ...prevSnapShot,
               {
@@ -171,7 +171,7 @@ const App = () => {
       setInputFields((prevSnapShot) => ({
         name: "",
         age: "",
-        id: prevSnapShot.id,
+        id: "",
       }));
       setShowAdd(true);
     }
@@ -224,6 +224,13 @@ const App = () => {
       ),
     },
   ];
+  const rowSelection = {
+    getCheckboxProps: (record) => ({
+      disabled: record.id === inputfields.id,
+      // Column configuration not to be checked
+      // name: record.name,
+    }),
+  };
 
   const antIcon = <LoadingOutlined spin />;
   return (
@@ -288,6 +295,24 @@ const App = () => {
               pagination={{
                 pageSize: 8,
                 size: "small",
+              }}
+              // rowSelection={{
+              //   ...rowSelection,
+              // }}
+              rowClassName={record => record.id=== inputfields.id && "disabled-row"}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    console.log(record);
+                    return {
+                      disabled: true,
+                    };
+                  }, // click row
+                  onDoubleClick: (event) => {}, // double click row
+                  onContextMenu: (event) => {}, // right button click row
+                  onMouseEnter: (event) => {}, // mouse enter row
+                  onMouseLeave: (event) => {}, // mouse leave row
+                };
               }}
             />
           </div>
