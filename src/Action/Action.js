@@ -6,13 +6,16 @@ export const FetchUserDisptacher = (setLoading) => {
     setLoading(true);
     try {
       const respo = await axios.get(
-        "https://jsonplaceholder.typicode.com/posts"
+        "https://jsonplaceholder.typicode.com/posts",{
+          params: {
+            _limit: 6
+           }
+        }
       );
       if (respo.request.status === 200 || respo.request.status === 201) {
         message.success("Data is fetched Sucessfully "); 
         const newState = respo.data
           .reverse()
-          .slice(0, 10)
           .map((obj) => ({
             id: obj.id,
             name: obj.title.slice(0, 10),
