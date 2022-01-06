@@ -1,26 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "./App.scss";
 import "antd/dist/antd.css";
-import { Button, Input, Table, message } from "antd";
+import { Button, Input, Table, message, Spin } from "antd";
 import axios from "axios";
+import { LoadingOutlined } from "@ant-design/icons";
 const App = () => {
   const [formDate, setFormDate] = useState([]);
   const [inputfields, setInputFields] = useState({
     name: "",
     age: "",
   });
+  const [loading, setLoading] = useState(false);
   const [id, setID] = useState(101);
   const [ShowAdd, setShowAdd] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      // Here is used Get Method
+      // Here is used Get MethodsetLoading
+      setLoading(true);
       try {
         const respo = await axios.get(
           "https://jsonplaceholder.typicode.com/posts"
         );
         console.log(respo);
         if (respo.request.status === 200) {
+          message.success("Data is fetched Sucessfully ");
           respo.data.reverse().map((obj) => {
             setFormDate((prevSnapShot) => [
               ...prevSnapShot,
@@ -33,7 +37,6 @@ const App = () => {
             ]);
             return undefined;
           });
-          message.success("Data is fetched Sucessfully ");
         } else {
           message.success("Data is fetched failed ");
         }
@@ -41,6 +44,7 @@ const App = () => {
         console.log(e);
         message.success("Data is fetched failed ");
       }
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -64,13 +68,8 @@ const App = () => {
         id,
         key: id,
       };
-      setFormDate((prevSnapShot) => [obj, ...prevSnapShot]);
-      setInputFields((prevSnapShot) => ({
-        name: "",
-        age: "",
-      }));
-      setID((prevSnapShot) => prevSnapShot + 1);
       // Here is used Post method
+      setLoading(true);
       try {
         const respo = await axios({
           method: "post",
@@ -84,6 +83,13 @@ const App = () => {
         if (respo.request.status === 200 || respo.request.status === 201) {
           console.log(respo);
           message.success("Data is stored Sucess full ");
+
+          setFormDate((prevSnapShot) => [obj, ...prevSnapShot]);
+          setInputFields((prevSnapShot) => ({
+            name: "",
+            age: "",
+          }));
+          setID((prevSnapShot) => prevSnapShot + 1);
         } else {
           new Error("some went worng");
         }
@@ -92,11 +98,11 @@ const App = () => {
         message.error("Data is faied to store");
       }
     }
+    setLoading(false);
   };
   const handleRemoveUser = async (id) => {
-    const newData = formDate.filter((item) => item.id !== id);
-    setFormDate(newData);
     try {
+      setLoading(true);
       const respo = await axios.delete(
         `https://jsonplaceholder.typicode.com/posts/${id}`,
         {
@@ -107,12 +113,15 @@ const App = () => {
       if (respo.request.status === 200 || respo.request.status === 201) {
         console.log(respo, "okkkkkkkkkkkkkkkkk");
         message.success("Data is deleted  Sucessfully ");
+        const newData = formDate.filter((item) => item.id !== id);
+        setFormDate(newData);
       } else {
         new Error("some went worng");
       }
     } catch (e) {
       message.error("Data is not deleted");
     }
+    setLoading(false);
   };
 
   const handleEditUser = (id) => {
@@ -126,20 +135,8 @@ const App = () => {
     setShowAdd(false);
   };
   const handleUpdateSubmit = async () => {
+    setLoading(true);
     if (inputfields.name && inputfields.age) {
-      setFormDate((prevSnapShot) => {
-        return prevSnapShot.map((item) => {
-          if (item.id === inputfields.id) {
-            return {
-              name: inputfields.name,
-              age: inputfields.age,
-              id: item.id,
-              key: item.id,
-            };
-          }
-          return item;
-        });
-      });
       try {
         const data = {
           name: inputfields.name,
@@ -153,6 +150,19 @@ const App = () => {
         );
         console.log(respo.data, "hahahhahahah");
         message.success("Data is updated Sucessfully ");
+        setFormDate((prevSnapShot) => {
+          return prevSnapShot.map((item) => {
+            if (item.id === inputfields.id) {
+              return {
+                name: inputfields.name,
+                age: inputfields.age,
+                id: item.id,
+                key: item.id,
+              };
+            }
+            return item;
+          });
+        });
       } catch (error) {
         console.log("error occured", error);
         message.error("Data is failed to store");
@@ -165,7 +175,9 @@ const App = () => {
       }));
       setShowAdd(true);
     }
+    setLoading(false);
   };
+
   const columns = [
     {
       title: "Name",
@@ -212,31 +224,34 @@ const App = () => {
       ),
     },
   ];
+
+  const antIcon = <LoadingOutlined spin />;
   return (
     <div>
+      <Spin spinning={loading} indicator={antIcon} style={{}} size="large" />
       <div className="container">
         <h1> Welcome To Survery Record </h1>
         <div className="container__items">
-        <div className="container__items__inputs">
-        <div>
-            <label> Username </label>
-            <Input
-              name="name"
-              value={inputfields.name}
-              onChange={handleInputChange}
-              type="text"
-            />
+          <div className="container__items__inputs">
+            <div>
+              <label> Username </label>
+              <Input
+                name="name"
+                value={inputfields.name}
+                onChange={handleInputChange}
+                type="text"
+              />
+            </div>
+            <div>
+              <label> Age </label>
+              <Input
+                value={inputfields.age}
+                onChange={handleInputChange}
+                name="age"
+                type="number"
+              />
+            </div>
           </div>
-          <div>
-            <label> Age </label>
-            <Input
-              value={inputfields.age}
-              onChange={handleInputChange}
-              name="age"
-              type="number"
-            />
-          </div>
-        </div>
           <div>
             {ShowAdd ? (
               <Button

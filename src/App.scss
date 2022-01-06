@@ -33,6 +33,23 @@
     height: 80%;
   }
 }
+.anticon-spin {
+  font-size: 100px !important;
+  color: #2d80b5;
+  // top: 50%;
+  // left: 50%;
+}
+.ant-spin-spinning {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  color: #2d80b5 !important;
+  z-index: 1000;
+}
+svg {
+  color: #2d80b5;
+}
 .ant-table-content {
   table {
     width: 70% !important;
