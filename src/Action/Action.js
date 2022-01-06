@@ -6,22 +6,21 @@ export const FetchUserDisptacher = (setLoading) => {
     setLoading(true);
     try {
       const respo = await axios.get(
-        "https://jsonplaceholder.typicode.com/posts",{
-          params: {
-            _limit: 6
-           }
-        }
+        "https://jsonplaceholder.typicode.com/posts?_limit=4"
+        // {
+        //   params: {
+        //     _limit: 6
+        //    }
+        // }
       );
       if (respo.request.status === 200 || respo.request.status === 201) {
-        message.success("Data is fetched Sucessfully "); 
-        const newState = respo.data
-          .reverse()
-          .map((obj) => ({
-            id: obj.id,
-            name: obj.title.slice(0, 10),
-            age: obj.id,
-            key: obj.id,
-          })); 
+        message.success("Data is fetched Sucessfully ");
+        const newState = respo.data.reverse().map((obj) => ({
+          id: obj.id,
+          name: obj.title.slice(0, 10),
+          age: obj.id,
+          key: obj.id,
+        }));
         dispatch({
           type: FetchUser,
           newState,
@@ -29,14 +28,18 @@ export const FetchUserDisptacher = (setLoading) => {
       } else {
         message.success("Data is fetched failed ");
       }
-    } catch (e) { 
+    } catch (e) {
       message.success("Data is fetched failed ");
     }
     setLoading(false);
   };
 };
 
-export const AddUserDispatch = ({ name, age, id, key }, setLoading) => {
+export const AddUserDispatch = (
+  { name, age, id, key },
+  setLoading,
+  setInputFields
+) => {
   return async (dispatch) => {
     try {
       setLoading(true);
@@ -60,6 +63,12 @@ export const AddUserDispatch = ({ name, age, id, key }, setLoading) => {
             key,
           },
         });
+        setInputFields({
+          name: "",
+          age: "",
+          id: "",
+          key: "",
+        });
       } else {
         new Error("some went worng");
       }
@@ -69,7 +78,11 @@ export const AddUserDispatch = ({ name, age, id, key }, setLoading) => {
     setLoading(false);
   };
 };
-export const EditUserDispatcher = (newUpadtedUser, setLoading) => {
+export const EditUserDispatcher = (
+  newUpadtedUser,
+  setLoading,
+  setInputFields
+) => {
   return async (dispatch) => {
     setLoading(true);
     try {
@@ -86,6 +99,12 @@ export const EditUserDispatcher = (newUpadtedUser, setLoading) => {
     dispatch({
       type: EditUser,
       newUpadtedUser,
+    });
+    setInputFields({
+      name: "",
+      age: "",
+      id: "",
+      key: "",
     });
     setLoading(false);
   };

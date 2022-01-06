@@ -44,13 +44,7 @@ const App = (props) => {
         id: Reduxid + 1,
         key: Reduxid + 1,
       }; 
-      dispatch(AddUserDispatch(obj, setLoading));
-      setInputFields({
-        name: "",
-        age: "",
-        id: "",
-        key: "",
-      });
+      dispatch(AddUserDispatch(obj, setLoading,setInputFields)); 
     }
   };
 
@@ -73,13 +67,7 @@ const App = (props) => {
         id: inputfields.id,
         key: inputfields.id,
       };
-      dispatch(EditUserDispatcher(data, setLoading));
-      setInputFields({
-        name: "",
-        age: "",
-        id: "",
-        key: "",
-      });
+      dispatch(EditUserDispatcher(data, setLoading,setInputFields)); 
       setShowAdd(true);
     }
   };
