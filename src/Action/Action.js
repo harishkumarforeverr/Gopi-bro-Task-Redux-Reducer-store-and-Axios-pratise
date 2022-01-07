@@ -15,11 +15,11 @@ export const FetchUserDisptacher = (setLoading) => {
       );
       if (respo.request.status === 200 || respo.request.status === 201) {
         message.success("Data is fetched Sucessfully ");
-        const newState = respo.data.reverse().map((obj) => ({
-          id: obj.id,
+        const newState = respo.data.map((obj,i) => ({
+          id: i+1 ,
           name: obj.title.slice(0, 10),
-          age: obj.id,
-          key: obj.id,
+          age: i+1,
+          key: i+1,
           updated:false
         }));
         dispatch({
@@ -51,6 +51,7 @@ export const AddUserDispatch = (
           title: name,
           body: age,
           userId: id,
+          updated:false
         },
       });
       if (respo.request.status === 200 || respo.request.status === 201) {
@@ -62,6 +63,7 @@ export const AddUserDispatch = (
             age,
             id,
             key,
+            updated:false
           },
         });
         setInputFields({

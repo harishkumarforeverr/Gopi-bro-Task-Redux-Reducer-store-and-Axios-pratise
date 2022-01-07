@@ -44,7 +44,7 @@ const App = (props) => {
         age: inputfields.age,
         id: Reduxid + 1,
         key: Reduxid + 1,
-        updated:false
+        updated: false,
       };
       dispatch(AddUserDispatch(obj, setLoading, setInputFields));
     }
@@ -57,7 +57,7 @@ const App = (props) => {
       age: getUser.age,
       id: getUser.id,
       key: getUser.key,
-      updated:false
+      updated: getUser.updated,
     });
     setShowAdd(false);
   };
@@ -69,7 +69,7 @@ const App = (props) => {
         age: inputfields.age,
         id: inputfields.id,
         key: inputfields.id,
-        updated:true
+        updated: inputfields.updated,
       };
       // SetUpdated(data.id);
       dispatch(EditUserDispatcher(data, setLoading, setInputFields));
@@ -83,7 +83,28 @@ const App = (props) => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text) => <a>{text}</a>,
+      render: (text, record) => (
+        <h1
+          onClick={() => {
+            dispatch({
+              type: "Edit_User",
+              newUpadtedUser: {
+                name: record.name,
+                age: record.age,
+                id: record.id,
+                key: record.id,
+                updated: !record.updated,
+              },
+            });
+          }}
+          style={{
+            color: "#0CBFC2",
+            cursor: "pointer",
+          }}
+        >
+          {text}
+        </h1>
+      ),
     },
     {
       title: "Age",
@@ -114,6 +135,7 @@ const App = (props) => {
           type="primary"
           danger
           onClick={() => {
+            console.log(record.id);
             dispatch(DeleteUserDispatch(record.id, setLoading));
           }}
         >
@@ -181,7 +203,21 @@ const App = (props) => {
                 pageSize: 8,
                 size: "small",
               }}
-              rowClassName={(record) => { 
+              // rowClassName={(record) => {
+              //   return `${record.id === inputfields.id && "disabled-row"}   ${
+              //     record.updated && "TableRowIsUpdated"
+              //   }  `;
+              // }}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {}, // click row
+                  onDoubleClick: (event) => {}, // double click row
+                  onContextMenu: (event) => {}, // right button click row
+                  onMouseEnter: (event) => {}, // mouse enter row
+                  onMouseLeave: (event) => {}, // mouse leave row
+                };
+              }}
+              rowClassName={(record) => {
                 return `${record.id === inputfields.id && "disabled-row"}   ${
                   record.updated && "TableRowIsUpdated"
                 }  `;

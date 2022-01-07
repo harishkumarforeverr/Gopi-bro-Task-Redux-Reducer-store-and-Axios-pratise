@@ -1,13 +1,13 @@
 @import "./Scss/base/_colors";
-.TableRowIsUpdated { 
+.TableRowIsUpdated {
   .ant-table-cell:nth-child(1) {
     // background-color: red;
-    a {
+    h1 {
       text-decoration-line: underline;
       text-decoration-thickness: 3px;
       text-decoration-color: #319197;
       // line-height: 2rem;
-      font-size: 2rem;
+      font-size: 1.5rem;
       text-underline-offset: 20%;
     }
   }
@@ -17,12 +17,12 @@
   pointer-events: none;
   .ant-table-cell:nth-child(1) {
     // background-color: red;
-    a {
+    h1 {
       text-decoration-line: underline;
       text-decoration-thickness: 3px;
       text-decoration-color: #319197;
       // line-height: 2rem;
-      font-size: 2rem;
+      font-size: 1.5rem;
       text-underline-offset: 20%;
     }
   }
@@ -83,6 +83,11 @@ svg {
     width: 70% !important;
     margin: 0 auto;
     // background-color: red;
+  }
+  .ant-table-tbody > tr > td {
+    h1 {
+      font-size: 1.9rem;
+    }
   }
 }
 // .ant-table .table{

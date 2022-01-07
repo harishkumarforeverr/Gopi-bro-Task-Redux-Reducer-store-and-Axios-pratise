@@ -15,7 +15,7 @@ const surveyReducer = (state = initialState, action) => {
     case FetchUser:
       return {
         formdata: action.newState,
-        id: action.newState[0].id ,
+        id: action.newState.at(-1).id ,
       };
     case AddUser:
       const newFormData = [action.newFormData,...state.formdata];
