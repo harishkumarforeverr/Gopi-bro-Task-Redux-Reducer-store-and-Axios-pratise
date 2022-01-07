@@ -20,6 +20,7 @@ export const FetchUserDisptacher = (setLoading) => {
           name: obj.title.slice(0, 10),
           age: obj.id,
           key: obj.id,
+          updated:false
         }));
         dispatch({
           type: FetchUser,

@@ -1,5 +1,17 @@
 @import "./Scss/base/_colors";
-
+.TableRowIsUpdated { 
+  .ant-table-cell:nth-child(1) {
+    // background-color: red;
+    a {
+      text-decoration-line: underline;
+      text-decoration-thickness: 3px;
+      text-decoration-color: #319197;
+      // line-height: 2rem;
+      font-size: 2rem;
+      text-underline-offset: 20%;
+    }
+  }
+}
 .disabled-row {
   background-color: #dcdcdc;
   pointer-events: none;
@@ -23,7 +35,7 @@
   h1 {
     text-align: center;
   }
-  &__items {  
+  &__items {
     display: grid;
     & > div {
       margin: 0.8rem;

@@ -18,9 +18,10 @@ const App = (props) => {
     age: "",
     id: "",
     key: "",
-  }); 
+  });
   const [loading, setLoading] = useState(false);
   const [ShowAdd, setShowAdd] = useState(true);
+  // const [updated, SetUpdated] = useState(undefined);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const App = (props) => {
       ...prevSnapShot,
       ...obj,
     }));
-  }; 
+  };
   const handleAddSubmit = async (e) => {
     if (inputfields.name && inputfields.age) {
       const obj = {
@@ -43,18 +44,20 @@ const App = (props) => {
         age: inputfields.age,
         id: Reduxid + 1,
         key: Reduxid + 1,
-      }; 
-      dispatch(AddUserDispatch(obj, setLoading,setInputFields)); 
+        updated:false
+      };
+      dispatch(AddUserDispatch(obj, setLoading, setInputFields));
     }
   };
 
   const handleEditUser = (id) => {
-    const getUser = ReduxFormData.find((item) => item.id === id); 
+    const getUser = ReduxFormData.find((item) => item.id === id);
     setInputFields({
       name: getUser.name,
       age: getUser.age,
       id: getUser.id,
       key: getUser.key,
+      updated:false
     });
     setShowAdd(false);
   };
@@ -66,8 +69,11 @@ const App = (props) => {
         age: inputfields.age,
         id: inputfields.id,
         key: inputfields.id,
+        updated:true
       };
-      dispatch(EditUserDispatcher(data, setLoading,setInputFields)); 
+      // SetUpdated(data.id);
+      dispatch(EditUserDispatcher(data, setLoading, setInputFields));
+
       setShowAdd(true);
     }
   };
@@ -91,7 +97,7 @@ const App = (props) => {
       render: (text, record) => (
         <Button
           type="primary"
-          onClick={() => { 
+          onClick={() => {
             handleEditUser(record.id);
           }}
         >
@@ -175,9 +181,11 @@ const App = (props) => {
                 pageSize: 8,
                 size: "small",
               }}
-              rowClassName={(record) =>
-                record.id === inputfields.id && "disabled-row"
-              }
+              rowClassName={(record) => { 
+                return `${record.id === inputfields.id && "disabled-row"}   ${
+                  record.updated && "TableRowIsUpdated"
+                }  `;
+              }}
             />
           </div>
         ) : (
